@@ -9,12 +9,22 @@
         body { background-color: #f0f4f8; color: #333; padding: 20px; }
         header { background: #0056b3; color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
         .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .role-selector { display: flex; justify-content: space-around; margin-bottom: 30px; background: #e9ecef; padding: 15px; border-radius: 8px; }
-        .btn-role { background: #6c757d; color: white; border: none; padding: 12px 24px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-        .btn-role:hover { background: #495057; }
-        .btn-active { background: #007bff !important; }
-        .panel { display: none; padding: 20px; border: 2px solid #007bff; border-radius: 8px; background-color: #fff; }
+        
+        /* PANTALLA DE LOGIN */
+        .login-box { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #0056b3; }
+        .login-box h2 { text-align: center; color: #0056b3; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-login { background: #0056b3; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-login:hover { background: #004085; }
+        .demo-credentials { background: #e9ecef; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 12px; color: #495057; }
+
+        /* INTERFAZ DEL SISTEMA SEGURA */
+        .system-interface { display: none; }
+        .panel { display: none; padding: 20px; border-top: 3px solid #007bff; border-radius: 0 0 8px 8px; background-color: #fff; }
         .panel-active { display: block; animation: fadeIn 0.5s; }
+        
         h2 { color: #0056b3; margin-bottom: 15px; border-bottom: 2px solid #e9ecef; padding-bottom: 5px; }
         .card { background: #f8f9fa; border-left: 5px solid #007bff; padding: 15px; margin-bottom: 15px; border-radius: 4px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -22,6 +32,8 @@
         th { background-color: #e9ecef; }
         .btn-action { background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
         .btn-action:hover { background: #218838; }
+        .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; float: right; font-weight: bold; margin-bottom: 15px; }
+        .user-info-bar { background: #e9ecef; padding: 10px 15px; border-radius: 6px; margin-bottom: 25px; font-weight: bold; font-size: 14px; color: #495057; display: inline-block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
@@ -31,16 +43,42 @@
     <h1>Clínica Odontológica - Sistema Web</h1>
 </header>
 
-<div class="container">
-    <h3>Seleccione su tipo de perfil:</h3>
-    <div class="role-selector">
-        <button class="btn-role btn-active" onclick="showPanel('paciente', this)">Rol: Paciente</button>
-        <button class="btn-role" onclick="showPanel('odontologo', this)">Rol: Personal Odontológico</button>
-        <button class="btn-role" onclick="showPanel('administrador', this)">Rol: Administrador</button>
+<div id="login-screen" class="login-box">
+    <h2>Iniciar Sesión</h2>
+    <div class="form-group">
+        <label>Correo Electrónico:</label>
+        <input type="email" id="login-email" placeholder="ejemplo@clinica.com">
+    </div>
+    <div class="form-group">
+        <label>Contraseña:</label>
+        <input type="password" id="login-password" placeholder="••••••••">
+    </div>
+    <div class="form-group">
+        <label>Seleccionar su Rol:</label>
+        <select id="login-role">
+            <option value="paciente">Paciente</option>
+            <option value="odontologo">Personal Odontológico</option>
+            <option value="administrador">Administrador</option>
+        </select>
+    </div>
+    <button class="btn-login" onclick="validateLogin()">Ingresar al Sistema</button>
+
+    <div class="demo-credentials">
+        <strong>💡 Control de Accesos:</strong><br>
+        • Ingrese cualquier correo/clave y elija el rol.<br>
+        • El sistema abrirá ÚNICAMENTE el panel del rol elegido para proteger la privacidad de los datos.
+    </div>
+</div>
+
+<div id="system-screen" class="container system-interface">
+    <button class="btn-logout" onclick="logout()">Cerrar Sesión ↩</button>
+    
+    <div class="user-info-bar">
+        🔑 Sesión Activa: <span id="session-display" style="color: #0056b3; text-transform: uppercase;"></span>
     </div>
 
-    <div id="panel-paciente" class="panel panel-active">
-        <h2>Panel del Paciente</h2>
+    <div id="panel-paciente" class="panel">
+        <h2>Panel Privado del Paciente</h2>
         <div class="card">
             <h4>• Agendar Nueva Cita Médica</h4>
             <p style="margin: 10px 0;">Seleccione los parámetros para su turno dental:</p>
@@ -102,15 +140,36 @@
 </div>
 
 <script>
-    function showPanel(role, element) {
-        // Ocultar todos los paneles
+    function validateLogin() {
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-password').value;
+        const role = document.getElementById('login-role').value;
+
+        if(email === "" || pass === "") {
+            alert("Por favor, ingrese su correo y contraseña de seguridad.");
+            return;
+        }
+
+        // Ocultar login y mostrar pantalla de sistema
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('system-screen').style.display = 'block';
+
+        // Poner el texto informativo de qué rol inició sesión
+        document.getElementById('session-display').innerText = role;
+
+        // OCULTAR ABSOLUTAMENTE TODOS LOS PANELES PRIMERO
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('panel-active'));
-        // Desactivar todos los botones
-        document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('btn-active'));
-        
-        // Mostrar panel seleccionado y activar botón
+
+        // MOSTRAR ÚNICA Y EXCLUSIVAMENTE EL PANEL SELECCIONADO (Seguridad total)
         document.getElementById('panel-' + role).classList.add('panel-active');
-        element.classList.add('btn-active');
+    }
+
+    function logout() {
+        // Regresar al login y limpiar campos por seguridad
+        document.getElementById('system-screen').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'block';
+        document.getElementById('login-email').value = "";
+        document.getElementById('login-password').value = "";
     }
 </script>
 </body>
