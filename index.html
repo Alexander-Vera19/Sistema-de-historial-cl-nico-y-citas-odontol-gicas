@@ -6,34 +6,69 @@
     <title>Clínica Odontológica - Sistema Web (Grupo 21)</title>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-        body { background-color: #f0f4f8; color: #333; padding: 20px; }
-        header { background: #0056b3; color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        body { background-color: #f0f4f8; color: #333; padding: 15px; min-height: 100vh; display: flex; flex-direction: column; }
         
-        /* PANTALLA DE LOGIN */
-        .login-box { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #0056b3; }
-        .login-box h2 { text-align: center; color: #0056b3; margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-login { background: #0056b3; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.3s; }
+        header { background: #0056b3; color: white; padding: 20px 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; width: 100%; }
+        header h1 { font-size: 1.8rem; word-wrap: break-word; }
+        
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; }
+        
+        /* PANTALLA DE LOGIN TOTALMENTE RESPONSIVA */
+        .login-box { width: 100%; max-width: 450px; margin: 30px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #0056b3; }
+        .login-box h2 { text-align: center; color: #0056b3; margin-bottom: 20px; font-size: 1.6rem; }
+        
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 15px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; min-height: 45px; }
+        
+        .btn-login { background: #0056b3; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 10px; }
         .btn-login:hover { background: #004085; }
-        .demo-credentials { background: #e9ecef; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 12px; color: #495057; }
+        
+        .demo-credentials { background: #e9ecef; padding: 12px; border-radius: 4px; margin-top: 20px; font-size: 13px; color: #495057; line-height: 1.5; }
 
-        /* INTERFAZ DEL SISTEMA SEGURA */
+        /* INTERFAZ DEL SISTEMA FLEXIBLE */
         .system-interface { display: none; }
-        .panel { display: none; padding: 20px; border-top: 3px solid #007bff; border-radius: 0 0 8px 8px; background-color: #fff; }
+        .panel { display: none; padding: 15px 5px; border-top: 3px solid #007bff; background-color: #fff; }
         .panel-active { display: block; animation: fadeIn 0.5s; }
         
-        h2 { color: #0056b3; margin-bottom: 15px; border-bottom: 2px solid #e9ecef; padding-bottom: 5px; }
-        .card { background: #f8f9fa; border-left: 5px solid #007bff; padding: 15px; margin-bottom: 15px; border-radius: 4px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #dee2e6; padding: 10px; text-align: left; }
-        th { background-color: #e9ecef; }
-        .btn-action { background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        h2 { color: #0056b3; margin-bottom: 15px; border-bottom: 2px solid #e9ecef; padding-bottom: 5px; font-size: 1.4rem; }
+        
+        /* TARJETAS CON AJUSTE AUTOMÁTICO DE TEXTO */
+        .card { background: #f8f9fa; border-left: 5px solid #007bff; padding: 15px; margin-bottom: 15px; border-radius: 4px; width: 100%; overflow: hidden; word-wrap: break-word; hyphens: auto; }
+        .card h4 { font-size: 1.1rem; margin-bottom: 8px; }
+        .card p { line-height: 1.5; font-size: 15px; }
+        
+        /* PARÁMETROS DE CITAS ADAPTABLES A MÓVIL */
+        .appointment-form { display: flex; flex-direction: column; gap: 12px; margin: 15px 0; }
+        .appointment-field { display: flex; flex-direction: column; gap: 5px; }
+        .appointment-field input, .appointment-field select { padding: 10px; font-size: 15px; border: 1px solid #ccc; border-radius: 4px; width: 100%; }
+        
+        /* TABLAS RESPONSIVAS CON DESPLAZAMIENTO LATERAL */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; border: 1px solid #dee2e6; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        th, td { border: 1px solid #dee2e6; padding: 12px 10px; text-align: left; font-size: 14px; }
+        th { background-color: #e9ecef; font-weight: bold; }
+        
+        /* BOTONES ACCIÓN */
+        .btn-action { background: #28a745; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-size: 15px; font-weight: bold; width: 100%; margin-top: 10px; }
         .btn-action:hover { background: #218838; }
-        .btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; float: right; font-weight: bold; margin-bottom: 15px; }
-        .user-info-bar { background: #e9ecef; padding: 10px 15px; border-radius: 6px; margin-bottom: 25px; font-weight: bold; font-size: 14px; color: #495057; display: inline-block; }
+        
+        .btn-logout { background: #dc3545; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; float: right; font-weight: bold; margin-bottom: 15px; font-size: 14px; }
+        .user-info-bar { background: #e9ecef; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; font-size: 14px; color: #495057; display: inline-block; width: 100%; text-align: center; }
+        
+        textarea { width: 100%; height: 80px; margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; resize: vertical; }
+
+        /* CONSULTA DE MEDIOS PARA PANTALLAS GRANDES (PC / TABLET) */
+        @media (min-width: 600px) {
+            body { padding: 20px; }
+            header h1 { font-size: 2.2rem; }
+            .appointment-form { flex-direction: row; align-items: flex-end; }
+            .appointment-field { flex: 1; }
+            .btn-action { width: auto; margin-top: 0; height: 43px; }
+            .user-info-bar { width: auto; text-align: left; }
+            .login-box { padding: 35px; margin: 50px auto; }
+        }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
@@ -64,9 +99,9 @@
     <button class="btn-login" onclick="validateLogin()">Ingresar al Sistema</button>
 
     <div class="demo-credentials">
-        <strong>💡 Control de Accesos:</strong><br>
-        • Ingrese cualquier correo/clave y elija el rol.<br>
-        • El sistema abrirá ÚNICAMENTE el panel del rol elegido para proteger la privacidad de los datos.
+        <strong>💡 Control de Accesos Certificado:</strong><br>
+        • Ingrese datos simulados y asigne el rol requerido.<br>
+        • La visualización se ajustará dinámicamente evitando desbordes de texto.
     </div>
 </div>
 
@@ -74,29 +109,43 @@
     <button class="btn-logout" onclick="logout()">Cerrar Sesión ↩</button>
     
     <div class="user-info-bar">
-         Sesión Activa: <span id="session-display" style="color: #0056b3; text-transform: uppercase;"></span>
+        Sesión Activa: <span id="session-display" style="color: #0056b3; text-transform: uppercase;"></span>
     </div>
 
     <div id="panel-paciente" class="panel">
         <h2>Panel Privado del Paciente</h2>
         <div class="card">
             <h4>• Agendar Nueva Cita Médica</h4>
-            <p style="margin: 10px 0;">Seleccione los parámetros para su turno dental:</p>
-            <label>Odontólogo: </label>
-            <select id="select-doc">
-                <option>Dr. Julio (Ortodoncia)</option>
-                <option>Dra. Mendoza (Endodoncia)</option>
-            </select>
-            <label style="margin-left: 15px;">Fecha: </label>
-            <input type="text" value="6 jul 2026" style="padding: 3px; width: 100px; text-align: center;">
-            <button class="btn-action" style="margin-left: 15px;" onclick="alert('¡Cita registrada con éxito en el sistema web!')">Reservar Cita</button>
+            <p>Seleccione los parámetros para su turno dental:</p>
+            
+            <div class="appointment-form">
+                <div class="appointment-field">
+                    <label>Odontólogo:</label>
+                    <select id="select-doc">
+                        <option>Dr. Julio (Ortodoncia)</option>
+                        <option>Dra. Mendoza (Endodoncia)</option>
+                    </select>
+                </div>
+                <div class="appointment-field">
+                    <label>Fecha:</label>
+                    <input type="text" value="6 jul 2026">
+                </div>
+                <button class="btn-action" onclick="alert('¡Cita registrada con éxito en el sistema web!')">Reservar Cita</button>
+            </div>
         </div>
+        
         <div class="card">
             <h4>• Mis Recetas y Diagnósticos Recientes</h4>
-            <table>
-                <tr><th>Fecha</th><th>Especialista</th><th>Diagnóstico</th><th>Tratamiento sugerido</th></tr>
-                <tr><td>15/05/2026</td><td>Dr. Julio</td><td>Caries Leve</td><td>Limpieza + Resina dental</td></tr>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Especialista</th><th>Diagnóstico</th><th>Tratamiento sugerido</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>15/05/2026</td><td>Dr. Julio</td><td>Caries Leve</td><td>Limpieza + Resina dental</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -104,17 +153,23 @@
         <h2>Panel de Control del Odontólogo</h2>
         <div class="card">
             <h4>Mi Agenda de Citas para Hoy</h4>
-            <table>
-                <tr><th>Hora</th><th>Paciente</th><th>Motivo de Consulta</th><th>Acción</th></tr>
-                <tr><td>09:00 AM</td><td>Alexander Muñoz</td><td>Control de Brackets</td><td><button class="btn-action" onclick="alert('Abriendo Historial Clínico de Alexander...')">Atender</button></td></tr>
-                <tr><td>10:30 AM</td><td>Ana Gómez</td><td>Dolor de Muela</td><td><button class="btn-action" onclick="alert('Abriendo Historial Clínico de Ana...')">Atender</button></td></tr>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr><th>Hora</th><th>Paciente</th><th>Motivo de Consulta</th><th>Acción</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>09:00 AM</td><td>Alexander Muñoz</td><td>Control de Brackets</td><td><button class="btn-action" style="margin-top:0; padding: 6px 12px; font-size:13px;" onclick="alert('Abriendo Historial Clínico de Alexander...')">Atender</button></td></tr>
+                        <tr><td>10:30 AM</td><td>Ana Gómez</td><td>Dolor de Muela</td><td><button class="btn-action" style="margin-top:0; padding: 6px 12px; font-size:13px;" onclick="alert('Abriendo Historial Clínico de Ana...')">Atender</button></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="card">
             <h4>Registro Directo en Ficha Clínica Digital</h4>
             <p>Paciente en atención: <strong>Alexander Muñoz</strong></p>
-            <textarea style="width:100%; height:60px; margin: 10px 0; padding:5px;" placeholder="Escriba el nuevo diagnóstico, alergias o evolución del tratamiento aquí..."></textarea>
-            <button class="btn-action" style="background:#007bff;" onclick="alert('Historial Clínico Guardado Exitosamente.')">Actualizar Historial Clínico</button>
+            <textarea placeholder="Escriba el nuevo diagnóstico, alergias o evolución del tratamiento aquí..."></textarea>
+            <button class="btn-action" style="background:#007bff; width:auto;" onclick="alert('Historial Clínico Guardado Exitosamente.')">Actualizar Historial Clínico</button>
         </div>
     </div>
 
@@ -123,7 +178,7 @@
         <div class="card" style="border-left-color: #dc3545;">
             <h4>Reporte de Rendimiento de la Clínica</h4>
             <p>Resumen analítico correspondiente al mes en curso:</p>
-            <ul style="margin-left: 20px; margin-top: 10px;">
+            <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.6; font-size: 15px;">
                 <li><strong>Total de Citas Agendadas mediante la Web:</strong> 142 citas.</li>
                 <li><strong>Tratamiento con mayor demanda:</strong> Profilaxis y Resinas (62%).</li>
                 <li><strong>Odontólogo con más atenciones:</strong> Dr. Julio (78 pacientes).</li>
@@ -131,9 +186,10 @@
         </div>
         <div class="card" style="border-left-color: #dc3545;">
             <h4>Control de Seguridad y Cuentas</h4>
-            <div style="margin-top: 10px;">
-                <button class="btn-role" style="font-size:12px; padding:8px 12px; background:#dc3545;" onclick="alert('Generando copia de seguridad de la base de datos SQL...')">Responder Base de Datos SQL</button>
-                <button class="btn-role" style="font-size:12px; padding:8px 12px; background:#ffc107; color:#333;" onclick="alert('Abriendo registros de auditoría de accesos...')">Auditar Logs de Acceso</button>
+            <p style="margin-bottom: 12px;">Acciones críticas del sistema de bases de datos:</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn-login" style="background:#dc3545; margin-top:0;" onclick="alert('Generando copia de seguridad de la base de datos SQL...')">Respaldar Base de Datos SQL</button>
+                <button class="btn-login" style="background:#ffc107; color:#333; margin-top:0;" onclick="alert('Abriendo registros de auditoría de accesos...')">Auditar Logs de Acceso</button>
             </div>
         </div>
     </div>
@@ -150,27 +206,25 @@
             return;
         }
 
-        // Ocultar login y mostrar pantalla de sistema
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('system-screen').style.display = 'block';
-
-        // Poner el texto informativo de qué rol inició sesión
         document.getElementById('session-display').innerText = role;
 
-        // OCULTAR ABSOLUTAMENTE TODOS LOS PANELES PRIMERO
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('panel-active'));
-
-        // MOSTRAR ÚNICA Y EXCLUSIVAMENTE EL PANEL SELECCIONADO (Seguridad total)
         document.getElementById('panel-' + role).classList.add('panel-active');
+        
+        // Hacer scroll automático al inicio de la pantalla al entrar
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function logout() {
-        // Regresar al login y limpiar campos por seguridad
         document.getElementById('system-screen').style.display = 'none';
         document.getElementById('login-screen').style.display = 'block';
         document.getElementById('login-email').value = "";
         document.getElementById('login-password').value = "";
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 </script>
 </body>
 </html>
+
